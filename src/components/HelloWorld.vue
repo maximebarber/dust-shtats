@@ -29,7 +29,7 @@ const count = ref(0)
   </p>
 
   <Button @click="count++" label="Count"></Button>
-  <h6>{{ count }}</h6>
+  <h5>{{ count }}</h5>
 
   <p>
     Edit
