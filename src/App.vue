@@ -6,7 +6,8 @@ import Shtats from './components/Shtats.vue'
 </script>
 
 <template>
-  <img alt="Vue logo" src="./assets/logo.png" />
+  <img alt="Vue logo" src="./assets/logo_hg.png" />
+  <h1>Dust Shtats</h1>
   <Shtats />
 </template>
 
