@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Button label="Submit" @click="getToken()" />
+    <Button label="Enter SHTATS" @click="getToken()" />
     <h2>{{ token }}</h2>
   </div>
 </template>

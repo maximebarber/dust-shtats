@@ -1,7 +1,7 @@
 <template>
-  <main class="m-8 flex flex-wrap justify-content-center">
-    <TracksInfo :tracks="this.tracks" class="flex-initial flex align-items-center justify-content-center" />
-    <ArtistCount :artists="this.artists" class="flex-initial flex align-items-center justify-content-center" />
+  <main>
+    <TracksInfo :tracks="this.tracksDetailsAndAudioFeaturesCombined" />
+    <ArtistCount :artists="this.artists" />
   </main>
 </template>
   
@@ -20,28 +20,24 @@ export default {
       tracks: [],
       tracksDetails: null,
       trackIdsString: [],
+      tracksAudioFeatures: [],
+      tracksDetailsAndAudioFeaturesCombined: [],
       artists: null,
     }
   },
   beforeCreate() {
-    console.log("🚀 ~ file: Shtats.vue:24 ~ beforeCreate ~ beforeCreate:", this.token)
   },
   created() {
-    this.token = localStorage.getItem('token')
-    this.getPlaylistTracks(0)
-    console.log("🚀 ~ file: Shtats.vue:28 ~ created ~ created:", this.token)
   },
   beforeMount() {
-    console.log("🚀 ~ file: Shtats.vue:31 ~ beforeMount ~ beforeMount:", this.token)
+    this.token = localStorage.getItem('token')
+    this.getPlaylistTracks(0)
   },
   mounted() {
-    console.log("🚀 ~ file: Shtats.vue:34 ~ mounted ~ mounted:", this.token)
   },
   beforeUpdate() {
-    console.log("🚀 ~ file: Shtats.vue:37 ~ beforeUpdate ~ beforeUpdate:", this.token)
   },
   updated() {
-    console.log("🚀 ~ file: Shtats.vue:41 ~ updated ~ updated:", this.token)
   },
   methods: {
     getPlaylistTracks(offset) {
@@ -76,13 +72,23 @@ export default {
               const trackArtist = currentValue.track.artists[0].name
               const trackName = currentValue.track.name
 
-              const track = {
-                id: trackId,
-                artist: trackArtist,
-                name: trackName,
-              }
+              fetch("https://api.spotify.com/v1/users/" + currentValue.added_by.id, requestOptions)
+                .then(response => response.text())
+                .then((result) => {
+                  const jsonUserProfile = JSON.parse(result) 
+                  const addedBy = jsonUserProfile.display_name
 
-              tracksDetailsTemp.push(track)
+                  const track = {
+                    id: trackId,
+                    artist: trackArtist,
+                    name: trackName,
+                    addedBy: addedBy,
+                  }
+    
+                  tracksDetailsTemp.push(track)
+                })
+                .catch(error => console.log('error', error));
+
             })
             this.tracksDetails = tracksDetailsTemp
             // PUSH INTO ARRAYS OF 100
@@ -96,7 +102,6 @@ export default {
                 b += 100
               }
             }
-            //console.log("🚀 ~ file: Shtats.vue:126 ~ .then ~ trackIdsString:", this.trackIdsString)
             for (let i = 0; i < this.trackIdsString.length; i++) {
               this.getTrackAudioFeatures(this.trackIdsString[i].join())
             }
@@ -108,7 +113,6 @@ export default {
       let artistCount = []
       this.tracks.map((currentValue) => {
         function upsert(array, element) { // (1)
-          console.log()
           const i = array.findIndex(_element => _element.artist === element.artist);
           if (i > -1) array[i].count = array[i].count + 1; // (2)
           else array.push(element);
@@ -134,8 +138,19 @@ export default {
         .then(response => response.text())
         .then((result) => {
           const jsonTrackAudioFeatures = JSON.parse(result)
-          console.log("🚀 ~ file: Shtats.vue:154 ~ .then ~ jsonTrackAudioFeatures:", jsonTrackAudioFeatures)
-          // TODO upsert with to this.tracksDetails
+          jsonTrackAudioFeatures.audio_features.map((currentTrack) => {
+            this.tracksAudioFeatures.push(currentTrack)
+          })
+
+          // Combine audio features with track details
+          let merged = [];
+          for (let i = 0; i < this.tracksAudioFeatures.length; i++) {
+            merged.push({
+              ...this.tracksAudioFeatures[i],
+              ...(this.tracksDetails.find((itmInner) => itmInner.id === this.tracksAudioFeatures[i].id))
+            });
+          }
+          this.tracksDetailsAndAudioFeaturesCombined = merged
         })
         .catch(error => console.log('error', error));
 
