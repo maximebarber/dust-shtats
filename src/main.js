@@ -1,5 +1,7 @@
 import { createApp } from 'vue'
 import App from './App.vue'
+import router from './router' 
+
 import PrimeVue from 'primevue/config';
 import Button from 'primevue/button';
 import DataTable from 'primevue/datatable';
@@ -13,6 +15,7 @@ import 'primeicons/primeicons.css';
 import '/node_modules/primeflex/primeflex.css';
 
 const app = createApp(App);
+app.use(router)
 app.use(PrimeVue);
 app.component('Button', Button);
 app.component('DataTable', DataTable);

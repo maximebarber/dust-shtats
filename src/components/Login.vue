@@ -43,6 +43,8 @@ export default {
         .then((result) => {
           const jsonApiToken = JSON.parse(result)
           this.token = jsonApiToken.access_token
+          localStorage.setItem('token', this.token)
+          this.$router.push('/shtats')
         })
         .catch((error) => console.log('error', error))
     },

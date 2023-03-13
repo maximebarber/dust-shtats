@@ -7,10 +7,11 @@ import Login from './components/Login.vue';
 </script>
 
 <template>
-  <img alt="Vue logo" src="./assets/logo_hg.png" />
+  <!-- <img alt="Vue logo" src="./assets/logo_hg.png" />-->
   <h1>Dust Shtats</h1>
-  <Login />
-  <Shtats />
+  <router-view />
+  <!-- <Login />
+  <Shtats /> -->
 </template>
 
 <style>
