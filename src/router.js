@@ -16,6 +16,11 @@ const router = createRouter({
       name: 'Shtats',
       component: Shtats,
       meta: { requiresAuth: true } // add meta field to require authentication
+    },
+    {
+      path: '/testy',
+      name: 'Testy',
+      component: Testy,
     }
   ]
 })
