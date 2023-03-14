@@ -1,53 +1,107 @@
 <template>
   <div>
-    <Button label="Enter SHTATS" @click="getToken()" />
-    <h2>{{ token }}</h2>
+    <button v-if="!loggedIn" @click="login">Log in to Spotify</button>
+    <div v-else>
+      Logged in as {{ user.display_name }}
+      <button @click="logout">Log out</button>
+      <router-view />
+    </div>
   </div>
 </template>
+
 <script>
 export default {
   data() {
     return {
-      token: null,
+      loggedIn: false,
+      user: null
     }
   },
   methods: {
-    handleClick: function () {
-      console.log("here")
+    login() {
+      const client_id = 'd5c90c3559e747e598fe18eccc6cd1a0'; // Your client id
+      const redirect_uri = 'http://localhost:3000';
+      const scopes = 'user-read-private user-read-email';
+      const url = `https://accounts.spotify.com/authorize?client_id=${client_id}&redirect_uri=${redirect_uri}&scope=${scopes}&response_type=code`;
+
+      window.location.href = url;
     },
-    getToken() {
-      // get token
-      var myHeaders = new Headers()
-      myHeaders.append(
-        'Authorization',
-        'Basic ZTU0NjlmMjY5MzViNDQ3OWIxZDhmNTI1OTUyYjE0ZjI6OGFhM2Q4OGZkY2RlNGYxNmExM2Q3N2QyYWJhNzI0YWE='
-      )
-      myHeaders.append('Content-Type', 'application/x-www-form-urlencoded')
-      myHeaders.append(
-        'Cookie',
-        '__Host-device_id=AQBri1yo6lP4nwGSwtM67CbUF_EOoHE4i58H_EEGSFBSkuYicFO8UKgrSD-0inlGYUyI6ZF3AxiZtRYICmySHZl6zG6PKzmY6TE; sp_tr=false'
-      )
+    async getToken(code) {
+      const client_id = 'd5c90c3559e747e598fe18eccc6cd1a0'; // Your client id
+      const client_secret = '643bf177ae114d369d9d3a7eab2fa1fb'; // Your secret
+      const redirect_uri = 'http://localhost:3000'; // Your redirect uri
 
-      var urlencoded = new URLSearchParams()
-      urlencoded.append('grant_type', 'client_credentials')
+      const data = {
+        grant_type: 'authorization_code',
+        code: code,
+        redirect_uri: redirect_uri
+      };
 
-      var requestOptions = {
+      const headers = new Headers({
+        'Content-Type': 'application/x-www-form-urlencoded',
+        'Authorization': 'Basic ' + btoa(client_id + ':' + client_secret)
+      });
+
+      const response = await fetch('https://accounts.spotify.com/api/token', {
         method: 'POST',
-        headers: myHeaders,
-        body: urlencoded,
-        redirect: 'follow'
-      }
+        headers: headers,
+        body: new URLSearchParams(data),
+      });
 
-      fetch('https://accounts.spotify.com/api/token', requestOptions)
-        .then((response) => response.text())
-        .then((result) => {
-          const jsonApiToken = JSON.parse(result)
-          this.token = jsonApiToken.access_token
-          localStorage.setItem('token', this.token)
-          this.$router.push('/shtats')
-        })
-        .catch((error) => console.log('error', error))
+      const tokenData = await response.json();
+
+      // Store the access token in local storage
+      localStorage.setItem('access_token', tokenData.access_token);
+
+      // Fetch the user's profile using the access token
+      const headersWithToken = new Headers({
+        'Authorization': 'Bearer ' + tokenData.access_token
+      });
+
+      const userResponse = await fetch('https://api.spotify.com/v1/me', {
+        headers: headersWithToken
+      });
+
+      this.user = await userResponse.json();
+      this.loggedIn = true;
+      console.log(this.user)
     },
+    logout() {
+      // Clear the access token from local storage
+      localStorage.removeItem('access_token');
+      this.loggedIn = false;
+      this.user = null;
+    }
+  },
+  async created() {
+    console.log('in created')
+    const code = this.$route.query.code;
+
+    if (code) {
+      // If a code is present in the query parameters, exchange it for an access token
+      await this.getToken(code);
+
+      // Redirect to the home page to remove the code from the query parameters
+      this.$router.push('/');
+      this.$router.push('/shtats');
+    } else {
+      // Check if there is an access token in local storage
+      const access_token = localStorage.getItem('access_token');
+
+      if (access_token) {
+        // If an access token is present, fetch the user's profile using it
+        const headersWithToken = new Headers({
+          'Authorization': 'Bearer ' + access_token
+        });
+
+        const userResponse = await fetch('https://api.spotify.com/v1/me', {
+          headers: headersWithToken
+        });
+
+        this.user = await userResponse.json();
+        this.loggedIn = true;
+      }
+    }
   }
 }
 </script>

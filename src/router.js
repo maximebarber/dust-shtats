@@ -6,7 +6,7 @@ const router = createRouter({
   history: createWebHistory(),
   routes: [
     {
-      path: '/login',
+      path: '/',
       name: 'Login',
       component: Login,
     },
@@ -25,7 +25,7 @@ router.beforeEach((to, from, next) => {
     const token = localStorage.getItem('token');
     if (!token) {
       // User is not authenticated, redirect to login page
-      next('/login');
+      next();
     } else {
       // User is authenticated, continue to the desired route
       next();

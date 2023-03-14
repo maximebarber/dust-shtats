@@ -30,7 +30,8 @@ export default {
   created() {
   },
   beforeMount() {
-    this.token = localStorage.getItem('token')
+    this.token = localStorage.getItem('access_token')
+    //this.token = localStorage.getItem('token')
     this.getPlaylistTracks(0)
   },
   mounted() {
