@@ -4,6 +4,7 @@ import Shtats from './components/Shtats.vue'
 
 const router = createRouter({
   history: createWebHistory(),
+  base: '/dust-shtats/',
   routes: [
     {
       path: '/',
