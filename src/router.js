@@ -4,8 +4,8 @@ import Shtats from './components/Shtats.vue'
 import Testy from './components/Testy.vue'
 
 const router = createRouter({
-  history: createWebHistory('/dust-shtats/'),
-  base: '/dust-shtats/',
+  history: createWebHistory('/'),
+  base: '/',
   routes: [
     {
       path: '/',

@@ -1,6 +1,6 @@
 {
   "name": "dust-shtats",
-  "homepage": "https://maximebarber.github.io/dust-shtats/",
+  "homepage": "https://dust-shtats.netlify.app/",
   "private": true,
   "version": "0.1.0",
   "scripts": {

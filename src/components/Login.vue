@@ -21,7 +21,7 @@ export default {
     login() {
       const client_id = 'd5c90c3559e747e598fe18eccc6cd1a0'; // Your client id
       //const redirect_uri = 'http://localhost:4173';
-      const redirect_uri = 'https://maximebarber.github.io/dust-shtats/';
+      const redirect_uri = 'https://dust-shtats.netlify.app/';
       const scopes = 'user-read-private user-read-email';
       const url = `https://accounts.spotify.com/authorize?client_id=${client_id}&redirect_uri=${redirect_uri}&scope=${scopes}&response_type=code`;
 
@@ -31,7 +31,7 @@ export default {
       const client_id = 'd5c90c3559e747e598fe18eccc6cd1a0'; // Your client id
       const client_secret = '643bf177ae114d369d9d3a7eab2fa1fb'; // Your secret
       //const redirect_uri = 'http://localhost:4173'; // Your redirect uri
-      const redirect_uri = 'https://maximebarber.github.io/dust-shtats/'; // Your redirect uri
+      const redirect_uri = 'https://dust-shtats.netlify.app/'; // Your redirect uri
 
       const data = {
         grant_type: 'authorization_code',
