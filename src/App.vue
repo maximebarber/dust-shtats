@@ -5,7 +5,7 @@
 
 <template>
   <img alt="Vue logo" src="./assets/logo_hg.png" />
-  <h1>Dust Shtats</h1>
+  <h1 class="dust-shtats-title"><span>Dust Shtats</span></h1>
   <router-view />
 </template>
 
@@ -17,5 +17,18 @@
   text-align: center;
   color: #2c3e50;
   margin-top: 60px;
+}
+
+.dust-shtats-title {
+  text-align: center; 
+}
+
+.dust-shtats-title span {
+  font-size: 4rem;
+  background-image: radial-gradient(circle, violet, indigo, blue, green, yellow, orange, red);
+  color: transparent;
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 </style>
