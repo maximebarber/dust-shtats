@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import Login from './components/Login.vue'
 import Shtats from './components/Shtats.vue'
+import Testy from './components/Testy.vue'
 
 const router = createRouter({
   history: createWebHistory('/dust-shtats/'),
