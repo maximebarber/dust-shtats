@@ -3,7 +3,7 @@ import Login from './components/Login.vue'
 import Shtats from './components/Shtats.vue'
 
 const router = createRouter({
-  history: createWebHistory(),
+  history: createWebHistory('/dust-shtats/'),
   base: '/dust-shtats/',
   routes: [
     {
