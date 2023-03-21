@@ -1,6 +1,6 @@
 <template>
   <div>
-    <button v-if="!loggedIn" @click="login">Log in to Spotify</button>
+    <button v-if="!loggedIn" @click="login">Log in to Shpotify</button>
     <div v-else>
       Logged in as {{ user.display_name }}
       <button @click="logout">Log out</button>
@@ -21,7 +21,7 @@ export default {
     login() {
       const client_id = 'd5c90c3559e747e598fe18eccc6cd1a0'; // Your client id
       //const redirect_uri = 'http://localhost:4173';
-      const redirect_uri = 'https://dust-shtats.netlify.app/';
+      const redirect_uri = import.meta.env.VITE_REDIRECT_URI;
       const scopes = 'user-read-private user-read-email';
       const url = `https://accounts.spotify.com/authorize?client_id=${client_id}&redirect_uri=${redirect_uri}&scope=${scopes}&response_type=code`;
 
@@ -31,7 +31,7 @@ export default {
       const client_id = 'd5c90c3559e747e598fe18eccc6cd1a0'; // Your client id
       const client_secret = '643bf177ae114d369d9d3a7eab2fa1fb'; // Your secret
       //const redirect_uri = 'http://localhost:4173'; // Your redirect uri
-      const redirect_uri = 'https://dust-shtats.netlify.app/'; // Your redirect uri
+      const redirect_uri = import.meta.env.VITE_REDIRECT_URI; // Your redirect uri
 
       const data = {
         grant_type: 'authorization_code',
@@ -51,6 +51,7 @@ export default {
       });
 
       const tokenData = await response.json();
+      console.log("🚀 ~ file: Login.vue:54 ~ getToken ~ tokenData:", tokenData)
 
       // Store the access token in local storage
       localStorage.setItem('access_token', tokenData.access_token);
@@ -76,7 +77,8 @@ export default {
     }
   },
   async created() {
-    console.log('in created')
+    console.log('VITE_REDIRECT_URI: ', import.meta.env.VITE_REDIRECT_URI)
+    console.log('PROD?: ', import.meta.env.PROD)
     const code = this.$route.query.code;
 
     if (code) {
@@ -85,7 +87,7 @@ export default {
 
       // Redirect to the home page to remove the code from the query parameters
       this.$router.push('/');
-      this.$router.push('/shtats');
+      //this.$router.push('/shtats');
     } else {
       // Check if there is an access token in local storage
       const access_token = localStorage.getItem('access_token');
