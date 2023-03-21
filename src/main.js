@@ -8,6 +8,8 @@ import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
 import ColumnGroup from 'primevue/columngroup';
 import Row from 'primevue/row'; 
+import Accordion from 'primevue/accordion';
+import AccordionTab from 'primevue/accordiontab';
 
 import 'primevue/resources/themes/saga-blue/theme.css';
 import 'primevue/resources/primevue.min.css';
@@ -22,5 +24,7 @@ app.component('DataTable', DataTable);
 app.component('Column', Column);
 app.component('ColumnGroup', ColumnGroup);
 app.component('Row', Row);
+app.component('Accordion', Accordion);
+app.component('AccordionTab', AccordionTab);
 
 app.mount('#app');

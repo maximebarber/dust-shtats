@@ -1,7 +1,13 @@
 <template>
   <main>
-    <TracksInfo :tracks="this.tracksDetailsAndAudioFeaturesCombined" />
-    <ArtistCount :artists="this.artists" />
+    <Accordion :activeIndex="0">
+      <AccordionTab header="Info about all the tracks">
+        <TracksInfo :tracks="this.tracksDetailsAndAudioFeaturesCombined" />
+      </AccordionTab>
+      <AccordionTab header="Info about the artists">
+        <ArtistCount :artists="this.artists" />
+      </AccordionTab>
+    </Accordion>
   </main>
 </template>
   
@@ -76,7 +82,7 @@ export default {
               fetch("https://api.spotify.com/v1/users/" + currentValue.added_by.id, requestOptions)
                 .then(response => response.text())
                 .then((result) => {
-                  const jsonUserProfile = JSON.parse(result) 
+                  const jsonUserProfile = JSON.parse(result)
                   const addedBy = jsonUserProfile.display_name
 
                   const track = {
@@ -85,7 +91,7 @@ export default {
                     name: trackName,
                     addedBy: addedBy,
                   }
-    
+
                   tracksDetailsTemp.push(track)
                 })
                 .catch(error => console.log('error', error));
