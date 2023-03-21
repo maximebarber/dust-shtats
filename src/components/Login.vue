@@ -2,8 +2,9 @@
   <div>
     <button v-if="!loggedIn" @click="login">Log in to Shpotify</button>
     <div v-else>
-      Logged in as {{ user.display_name }}
-      <button @click="logout">Log out</button>
+      Logged in as <b>{{ user.display_name }}</b>
+      <Button class="login-button" label="Log me out of here fooo" @click="logout"/>
+      <Button class="login-button" label="Take me to some juicy shtats" @click="goToShtats"/>
       <router-view />
     </div>
   </div>
@@ -74,6 +75,9 @@ export default {
       localStorage.removeItem('access_token');
       this.loggedIn = false;
       this.user = null;
+    },
+    goToShtats() {
+      this.$router.push('/shtats')
     }
   },
   async created() {
@@ -109,3 +113,10 @@ export default {
   }
 }
 </script>
+
+<style>
+.login-button {
+  display: block;
+  margin: 15px auto;
+}
+</style>
